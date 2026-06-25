@@ -10,17 +10,40 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Alivon brand palette */
+  --color-alivon-primary: #1976D2;
+  --color-alivon-light:   #42A5F5;
+  --color-alivon-dark:    #0D47A1;
+  --color-alivon-deeper:  #1565C0;
+  --color-alivon-muted:   #546E7A;
+  --color-alivon-border:  #90A4AE;
+  --color-alivon-pale:    #BBDEFB;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Progress bar — cross-browser, uses brand CSS vars */
+progress.quest-progress {
+  appearance: none;
+  height: 0.5rem;
+  border-radius: 9999px;
+  border: none;
+  background: var(--color-alivon-pale);
+}
+progress.quest-progress::-webkit-progress-bar {
+  background: var(--color-alivon-pale);
+  border-radius: 9999px;
+}
+progress.quest-progress::-webkit-progress-value {
+  background: var(--color-alivon-primary);
+  border-radius: 9999px;
+}
+progress.quest-progress::-moz-progress-bar {
+  background: var(--color-alivon-primary);
+  border-radius: 9999px;
 }

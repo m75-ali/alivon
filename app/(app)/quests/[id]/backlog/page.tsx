@@ -82,6 +82,24 @@ async function updateStatus(itemId: string, questId: string, status: 'in_progres
   revalidatePath(`/quests/${questId}/backlog`)
 }
 
+// Permanently remove a backlog item — only allowed when it has no log entries.
+// Items with logged wins must be skipped instead, to preserve journal history.
+async function deleteItem(itemId: string, questId: string) {
+  'use server'
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return
+
+  const { count } = await supabase
+    .from('log_entries')
+    .select('id', { count: 'exact', head: true })
+    .eq('quest_item_id', itemId)
+  if (count && count > 0) return // has history — skip, don't delete
+
+  await supabase.from('quest_items').delete().eq('id', itemId)
+  revalidatePath(`/quests/${questId}/backlog`)
+}
+
 // ── Page ─────────────────────────────────────────────────────
 
 const STATUS_LABEL: Record<BacklogItem['status'], string> = {
@@ -136,6 +154,7 @@ export default async function BacklogPage({ params }: { params: Promise<{ id: st
           const start    = updateStatus.bind(null, item.id, id, 'in_progress')
           const skip     = updateStatus.bind(null, item.id, id, 'skipped')
           const markDone = updateStatus.bind(null, item.id, id, 'done')
+          const remove   = deleteItem.bind(null, item.id, id)
 
           return (
             <div
@@ -195,6 +214,13 @@ export default async function BacklogPage({ params }: { params: Promise<{ id: st
                   <form action={skip}>
                     <button type="submit" className="rounded-lg border border-alivon-border px-2.5 py-1 text-xs font-medium text-alivon-muted hover:bg-zinc-50">
                       Skip
+                    </button>
+                  </form>
+                )}
+                {!item.has_logs && (
+                  <form action={remove}>
+                    <button type="submit" className="rounded-lg border border-alivon-border px-2.5 py-1 text-xs font-medium text-alivon-muted hover:bg-red-50 hover:text-red-600 hover:border-red-300">
+                      Delete
                     </button>
                   </form>
                 )}

@@ -119,7 +119,7 @@ export default function CompleteForm({ questId, action }: Props) {
         disabled={pending}
         className="w-full rounded-xl bg-green-600 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-green-700 disabled:opacity-50"
       >
-        {pending ? 'Completing…' : '🏆 Complete quest'}
+        {pending ? 'Completing…' : 'Complete quest'}
       </button>
     </form>
   )

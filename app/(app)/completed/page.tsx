@@ -24,7 +24,7 @@ export default async function CompletedPage() {
         ← Back
       </Link>
 
-      <h1 className="mt-4 text-2xl font-semibold text-alivon-dark">🏆 Completed</h1>
+      <h1 className="mt-4 text-2xl font-semibold text-alivon-dark">Completed</h1>
       <p className="mt-0.5 text-sm text-alivon-muted">Quests you&apos;ve seen through to the end.</p>
 
       {quests.length === 0 ? (

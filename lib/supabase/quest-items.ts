@@ -6,17 +6,25 @@ export type BacklogItem = {
   description: string | null
   status: 'queued' | 'in_progress' | 'done' | 'skipped'
   order_index: number
+  // True if at least one log entry references this item. Items with logs can
+  // only be skipped (journal history is preserved); empty items can be deleted.
+  has_logs: boolean
 }
 
 export async function getQuestItems(questId: string): Promise<BacklogItem[]> {
   const supabase = await createClient()
   const { data, error } = await supabase
     .from('quest_items')
-    .select('id, title, description, status, order_index')
+    .select('id, title, description, status, order_index, log_entries(count)')
     .eq('quest_id', questId)
     .order('order_index')
   if (error) throw error
-  return (data ?? []) as BacklogItem[]
+
+  type Row = Omit<BacklogItem, 'has_logs'> & { log_entries: { count: number }[] }
+  return ((data ?? []) as Row[]).map(({ log_entries, ...item }) => ({
+    ...item,
+    has_logs: (log_entries[0]?.count ?? 0) > 0,
+  }))
 }
 
 export type QuestItemForLog = {

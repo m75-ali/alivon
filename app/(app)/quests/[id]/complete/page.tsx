@@ -25,8 +25,7 @@ export default async function CompleteQuestPage({ params }: { params: Promise<{ 
       </Link>
 
       <div className="mt-6 text-center">
-        <span className="text-5xl">🏆</span>
-        <h1 className="mt-3 text-2xl font-semibold text-alivon-dark">Complete this quest?</h1>
+        <h1 className="text-2xl font-semibold text-alivon-dark">Complete this quest?</h1>
         <p className="mt-1 text-sm text-alivon-muted">
           You&apos;re closing the book on <span className="font-medium text-alivon-dark">{quest.title}</span>.
           Mark the moment — this becomes the final entry on your timeline.

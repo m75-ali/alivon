@@ -24,7 +24,7 @@ export default async function HomePage() {
             href="/completed"
             className="text-sm font-medium text-alivon-muted underline-offset-4 hover:text-alivon-dark hover:underline"
           >
-            🏆 Completed
+            Completed
           </Link>
           <Link
             href="/quests/new"
@@ -124,7 +124,7 @@ function QuestCard({ quest }: { quest: QuestWithItems }) {
             href={`/quests/${quest.id}/complete`}
             className="mt-4 flex items-center justify-center gap-2 rounded-xl bg-green-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-green-700"
           >
-            🎉 Mark quest complete
+            Mark quest complete
           </Link>
         )}
 

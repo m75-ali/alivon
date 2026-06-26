@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { logout } from '@/app/actions/auth'
 
 async function deleteAccount() {
   'use server'
@@ -31,6 +32,14 @@ export default async function SettingsPage() {
         <div className="mt-3 rounded-2xl border border-alivon-border bg-white p-5">
           <p className="text-xs text-alivon-muted">Signed in as</p>
           <p className="mt-0.5 text-sm font-medium text-alivon-dark">{user.email}</p>
+          <form action={logout} className="mt-4">
+            <button
+              type="submit"
+              className="rounded-xl border border-alivon-border px-4 py-2 text-sm font-medium text-alivon-muted transition-colors hover:border-alivon-primary hover:text-alivon-primary"
+            >
+              Sign out
+            </button>
+          </form>
         </div>
       </section>
 

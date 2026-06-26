@@ -8,8 +8,10 @@ rule is unchanged: **when in doubt, do less, not more.**
 
 ## 0. Where V1 actually landed (so brief and build agree)
 
-V1 is built and the build is clean (`tsc`, eslint, `next build` all pass). Two things
-differ from how the V1 brief was written — both are correct, just reality:
+V1 is built and the build is clean (`tsc`, eslint, `next build` all pass). It is also
+**live in production** at https://alivon.io (Vercel + GitHub Actions CI/CD — see §2), and
+the §3 reconcile work below is **done**. Two things differ from how the V1 brief was
+written — both are correct, just reality:
 
 - **Tailwind v4 has no `tailwind.config.ts`.** The brand palette lives as `@theme inline`
   CSS variables in `app/globals.css`. Same colours, same `bg-alivon-*` class names.
@@ -19,12 +21,13 @@ differ from how the V1 brief was written — both are correct, just reality:
 
 V1 also shipped a **quest completion lifecycle** beyond the original V1 brief. Rather than
 rip it out, V2 adopts it because the social layer gives it a real job (see §5). What exists:
-- `quests.status`: `active | paused | completed | abandoned`, plus `completed_at` and a
-  completion "capstone" (`completion_note`, `completion_image_url`, `completion_mood`).
+- `quests.status`: `active | paused | completed | archived` (post-§3; `abandoned` was
+  dropped), plus `completed_at` and a completion "capstone" (`completion_note`,
+  `completion_image_url`, `completion_mood`).
 - A `/completed` page, a "Mark complete" flow with a 100%-progress nudge, and pause/resume.
 
-These are **kept** and documented here. The only cleanups (see §3) are: drop the redundant
-`abandoned` state, restore `archived`, and soften the gamified tone.
+These are **kept** and documented here. The §3 cleanups (drop the redundant `abandoned`
+state, restore `archived`, soften the gamified tone) are **done**.
 
 ---
 
@@ -32,8 +35,12 @@ These are **kept** and documented here. The only cleanups (see §3) are: drop th
 
 Do not start V2 feature work until V1 has been **live and used for a few weeks with real
 logged activity**. V2 amplifies an existing habit; it can't create one. If nobody returns
-to log updates, building a social layer is wasted effort. The §3 cleanup is the only work
-to do before that evidence exists.
+to log updates, building a social layer is wasted effort.
+
+**Status (2026-06-26):** the §3 cleanup is **done** and the app is **live** at
+https://alivon.io. The clock on "live and used for a few weeks" has now started — V1 is
+out for real users and feedback. The social layer stays parked until returning-usage
+evidence exists; there is **no reconcile work left** to do in the meantime.
 
 ---
 
@@ -42,28 +49,40 @@ to do before that evidence exists.
 - Next.js 16.2.9 (App Router, Turbopack), React 19, TypeScript strict.
 - Tailwind v4 (palette in `app/globals.css`).
 - Supabase (Auth + Postgres + RLS + private Storage) via `@supabase/ssr`. Hosted, not local.
-- Env keys in `.env.local` only. Env var is `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
+- Env keys in `.env.local` for local dev. Env vars are `NEXT_PUBLIC_SUPABASE_URL` and
+  `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (both public — they compile into the client bundle).
+- **Hosting/CI-CD:** deployed on **Vercel** at `alivon.io` (apex domain, Cloudflare DNS
+  `A → 76.76.21.21`, DNS-only). **GitHub Actions** (`.github/workflows/ci-cd.yml`) runs
+  lint + typecheck + build on every push/PR to `main`, then deploys to Vercel on push to
+  `main` (gated on CI). The two `NEXT_PUBLIC_*` values are inlined into the build from
+  **GitHub secrets** — not Vercel env storage, which silently stored them empty and broke
+  prod. See `DEPLOYMENT.md`. Migrations are still applied **manually** in the Supabase SQL
+  editor (CLI not linked); the pipeline does not run them.
 
 ---
 
-## 3. Reconcile-first tasks (small, do these before social)
+## 3. Reconcile-first tasks — ✅ DONE (2026-06-26)
 
 Cheap hygiene that makes the base honest. One migration plus a couple of small edits.
+All four shipped in migration `20260625000004_v2_reconcile.sql` (applied) and in-place
+code edits; `tsc`/eslint clean.
 
-1. **Cleanup migration on `quests`:**
+1. **Cleanup migration on `quests`:** ✅
    - Status enum → `active | paused | completed | archived` (drop `abandoned`).
    - Add `visibility text not null default 'private' check (visibility in ('private','public'))`.
    - Add `nudges_enabled boolean not null default true`.
-2. **DB-level length limits.** Add `CHECK (char_length(col) <= N)` to match the frontend
+2. **DB-level length limits.** ✅ `CHECK (char_length(col) <= N)` matching the frontend
    `maxLength` values (quest title 100, description 500, item title 100, item desc 500,
-   note 1000). Both briefs asked for this; it was frontend-only.
-3. **Item delete rule** (V2 already adopted this): quest items with **zero** log entries can
-   be permanently deleted from the backlog; items with **at least one** log entry can only be
-   skipped, preserving journal history.
-4. **Soften completion tone.** Keep the feature, drop the 🏆/🎉 gamified styling so it reads
-   calm (see Design direction).
+   note 1000).
+3. **Item delete rule.** ✅ quest items with **zero** log entries can be permanently deleted
+   from the backlog; items with **at least one** log entry can only be skipped, preserving
+   journal history. (`getQuestItems` returns `has_logs`; Delete button + `deleteItem` action
+   in the backlog page.)
+4. **Soften completion tone.** ✅ kept the feature, removed the 🏆/🎉 gamified styling so it
+   reads calm. *(Superseded 2026-06-26 — see §9: the direction is now tasteful gamification,
+   and celebratory moments return deliberately as reward features.)*
 
-No new abstractions for any of this. Edit the existing files in place.
+No new abstractions for any of this. Done by editing the existing files in place.
 
 ---
 
@@ -217,12 +236,35 @@ So the build and the brief agree:
 
 ---
 
-## 9. Design direction
+## 9. Design direction — *updated 2026-06-26: tasteful gamification*
 
-The social layer is an **extension of the journal, not a pivot to a social network**. No
-public metrics competing for attention, no gamified trophies. Keep the completion moment calm
-and quietly satisfying — a closing photo and a note, not confetti. The focus is seeing
-someone's real progress, not performance. Clean, minimal, mobile-first, calm.
+**Direction change (owner decision).** The original "calm, no gamification" stance is
+superseded. The app felt too plain, and the goal now is a **rewarding, dopamine-positive
+feel that brings people back** — *tastefully*. The line we hold:
+
+- **Reward progress, not performance.** Celebrate the user's own milestones (streaks,
+  completion moments, "win logged" beats). Still **no leaderboards** and no public
+  like/follower counts styled as competitive metrics (§8 unchanged) — the dopamine comes
+  from *your* progress, not from beating others.
+- **Alive, not loud.** Ambient motion and earned celebration, never clutter. Background
+  delight (e.g. faint floating "quest objects" drifting in the whitespace) must **never take
+  focus from the user's intent** — low opacity, slow motion, `pointer-events-none`, and it
+  honours `prefers-reduced-motion`.
+- **Earned, not constant.** Celebratory beats (confetti, cheers) fire on real achievements
+  (logging a win, completing a quest), not on every tap.
+- Still **clean, mobile-first, accessible**. Gamification is a layer on top, not a rewrite.
+
+This **supersedes §3.4** (which had stripped the 🏆/🎉). Those were removed during the calm
+phase; celebratory moments now return deliberately as reward features. The "win logged" 🎉 in
+`LogForm` is on-brand again under this direction.
+
+**Build order for the gamified layer (each on its own branch + PR — see §11/CI):**
+1. *Ambient background objects* — floating decorative quest objects (Tailwind/CSS + lucide
+   SVGs). Pure polish, no data model. **(in progress)**
+2. *Reward moments* — streak tracking (a small amount of new DB state) and completion
+   confetti / win-logged celebration beats.
+3. Anything beyond that (XP, levels, badges, point economy) stays **out of scope** until
+   feedback proves demand — flag and wait, per §8.
 
 ---
 

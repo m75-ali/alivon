@@ -27,6 +27,21 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Ambient floating background objects (see AmbientBackground.tsx).
+   Duration is set per-object inline; honour reduced-motion preferences. */
+@keyframes alivon-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-14px) rotate(4deg); }
+}
+.alivon-float {
+  animation-name: alivon-float;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .alivon-float { animation: none; }
+}
+
 /* Progress bar — cross-browser, uses brand CSS vars */
 progress.quest-progress {
   appearance: none;

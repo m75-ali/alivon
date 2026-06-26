@@ -60,14 +60,20 @@ jobs:
       - name: Install Vercel CLI
         run: npm i -g vercel@latest
 
-      # Pull the project's production env vars + settings from Vercel,
-      # build with them, then deploy the prebuilt output. This is the
-      # explicit "CD" step — the deploy is owned by the pipeline, not magic.
+      # Pull the project's settings from Vercel, build, then deploy the
+      # prebuilt output. This is the explicit "CD" step — the deploy is owned
+      # by the pipeline, not magic.
       - name: Pull Vercel project settings
         run: vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
 
+      # The NEXT_PUBLIC_* values are public (they ship to the browser), so we
+      # inline them straight from GitHub secrets at build time rather than rely
+      # on Vercel's env storage. Keeps the build self-contained and reproducible.
       - name: Build with Vercel
         run: vercel build --prod --token="$VERCEL_TOKEN"
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
 
       - name: Deploy to production
         run: vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN"

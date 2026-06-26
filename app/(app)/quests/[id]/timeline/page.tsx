@@ -91,8 +91,7 @@ function CapstoneCard({ quest, imageUrl }: { quest: QuestDetail; imageUrl: strin
 
       <div className="p-4">
         <div className="flex items-center gap-2">
-          <span className="text-lg">🏆</span>
-          <p className="text-xs font-semibold uppercase tracking-wide text-green-600">Quest completed</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-alivon-muted">Quest completed</p>
         </div>
 
         {quest.completion_note && (

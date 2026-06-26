@@ -48,10 +48,10 @@ export default function PrivacyPage() {
           <p className="mt-2 text-alivon-muted">
             For privacy questions, contact{' '}
             <a
-              href="mailto:ali.mohamed5981@gmail.com"
+              href="mailto:hello@alivonweb.com"
               className="text-alivon-primary underline-offset-4 hover:underline"
             >
-              ali.mohamed5981@gmail.com
+              hello@alivonweb.com
             </a>
           </p>
         </section>

@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { logout } from '@/app/actions/auth'
+import DeleteAccountForm from './DeleteAccountForm'
 
 async function deleteAccount() {
   'use server'
@@ -59,17 +60,10 @@ export default async function SettingsPage() {
         <h2 className="text-xs font-medium uppercase tracking-wide text-red-400">Danger zone</h2>
         <div className="mt-3 rounded-2xl border border-red-100 bg-white p-5">
           <p className="text-sm font-medium text-alivon-dark">Delete my account</p>
-          <p className="mt-1 text-sm text-alivon-muted">
+          <p className="mt-1 mb-4 text-sm text-alivon-muted">
             Permanently deletes your account and all data — quests, items, log entries, and photos. This cannot be undone.
           </p>
-          <form action={deleteAccount} className="mt-4">
-            <button
-              type="submit"
-              className="rounded-xl border border-red-300 px-4 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50"
-            >
-              Delete my account
-            </button>
-          </form>
+          <DeleteAccountForm email={user.email ?? ''} action={deleteAccount} />
         </div>
       </section>
     </main>

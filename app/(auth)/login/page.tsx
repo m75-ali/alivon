@@ -4,6 +4,7 @@ import { useActionState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { login, type AuthState } from '@/app/actions/auth'
+import PasswordInput from '../PasswordInput'
 
 const initialState: AuthState = { error: null }
 
@@ -34,21 +35,13 @@ export default function LoginPage() {
             />
           </div>
 
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-alivon-muted">
-              Password
-            </label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              required
-              autoComplete="current-password"
-              minLength={6}
-              placeholder="••••••••"
-              className="mt-1 block w-full rounded-xl border border-alivon-border bg-white px-3 py-2.5 text-sm text-alivon-dark placeholder:text-alivon-border focus:border-alivon-primary focus:outline-none focus:ring-1 focus:ring-alivon-primary"
-            />
-          </div>
+          <PasswordInput
+            id="password"
+            name="password"
+            label="Password"
+            autoComplete="current-password"
+            minLength={6}
+          />
 
           {state.error && (
             <p className="text-sm text-red-600">{state.error}</p>

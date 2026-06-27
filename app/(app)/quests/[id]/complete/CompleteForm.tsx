@@ -1,6 +1,7 @@
 'use client'
 
 import { useActionState, useRef, useState } from 'react'
+import { resizeImage } from '@/lib/resizeImage'
 
 type CompleteState = { error: string | null }
 
@@ -25,9 +26,16 @@ export default function CompleteForm({ questId, action }: Props) {
   const [noteLen, setNoteLen] = useState(0)
   const fileRef = useRef<HTMLInputElement>(null)
 
-  function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
+  async function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
-    setPreview(file ? URL.createObjectURL(file) : null)
+    if (!file) { setPreview(null); return }
+    const resized = await resizeImage(file)
+    if (fileRef.current && resized !== file) {
+      const dt = new DataTransfer()
+      dt.items.add(resized)
+      fileRef.current.files = dt.files
+    }
+    setPreview(URL.createObjectURL(resized))
   }
 
   return (

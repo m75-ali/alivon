@@ -6,7 +6,7 @@ const AUTH_PATHS = ['/login', '/signup']
 // Accessible to everyone without login — no redirect in either direction.
 // /auth/confirm must be open so the email-verification handler can run and
 // establish the session before any auth redirect kicks in.
-const OPEN_PATHS = ['/privacy', '/auth/confirm']
+const OPEN_PATHS = ['/privacy', '/auth/confirm', '/forgot-password']
 
 export async function proxy(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request })

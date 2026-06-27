@@ -60,6 +60,40 @@ export async function signup(_state: AuthState, formData: FormData): Promise<Aut
   redirect('/home')
 }
 
+// Send a password-reset email. The reset link (configured in the Supabase
+// "Reset Password" template) lands on /auth/confirm with type=recovery, which
+// establishes a session and forwards to /update-password.
+export async function requestPasswordReset(_state: AuthState, formData: FormData): Promise<AuthState> {
+  const supabase = await createClient()
+
+  const email = (formData.get('email') as string ?? '').trim()
+  if (!EMAIL_RE.test(email)) return { error: 'Please enter a valid email address.' }
+
+  const { error } = await supabase.auth.resetPasswordForEmail(email)
+  if (error) return { error: cleanAuthError(error.message) }
+
+  // Neutral message regardless of whether the email exists (no enumeration).
+  return { error: null, message: 'If an account exists for that email, a reset link is on its way.' }
+}
+
+// Set a new password. Runs in the recovery session created by /auth/confirm.
+export async function updatePassword(_state: AuthState, formData: FormData): Promise<AuthState> {
+  const supabase = await createClient()
+
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Your reset link is invalid or has expired. Please request a new one.' }
+
+  const password = formData.get('password') as string
+  const passwordConfirm = formData.get('passwordConfirm') as string
+  if (!password || password.length < 6) return { error: 'Password must be at least 6 characters.' }
+  if (password !== passwordConfirm) return { error: "Passwords don't match." }
+
+  const { error } = await supabase.auth.updateUser({ password })
+  if (error) return { error: cleanAuthError(error.message) }
+
+  redirect('/home')
+}
+
 export async function logout() {
   const supabase = await createClient()
   await supabase.auth.signOut()

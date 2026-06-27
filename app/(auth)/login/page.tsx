@@ -43,6 +43,15 @@ export default function LoginPage() {
             minLength={6}
           />
 
+          <div className="text-right">
+            <Link
+              href="/forgot-password"
+              className="text-sm text-alivon-primary underline-offset-4 hover:underline"
+            >
+              Forgot password?
+            </Link>
+          </div>
+
           {state.error && (
             <p className="text-sm text-red-600">{state.error}</p>
           )}

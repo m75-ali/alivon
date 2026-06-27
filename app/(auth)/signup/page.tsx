@@ -42,6 +42,23 @@ export default function SignupPage() {
 
         <form action={action} className="mt-8 space-y-4">
           <div>
+            <label htmlFor="username" className="block text-sm font-medium text-alivon-muted">
+              Username
+            </label>
+            <input
+              id="username"
+              name="username"
+              type="text"
+              required
+              autoComplete="username"
+              pattern="[A-Za-z0-9_]{3,30}"
+              title="3–30 characters: letters, numbers, or underscores"
+              placeholder="yourname"
+              className="mt-1 block w-full rounded-xl border border-alivon-border bg-white px-3 py-2.5 text-sm text-alivon-dark placeholder:text-alivon-border focus:border-alivon-primary focus:outline-none focus:ring-1 focus:ring-alivon-primary"
+            />
+          </div>
+
+          <div>
             <label htmlFor="email" className="block text-sm font-medium text-alivon-muted">
               Email
             </label>

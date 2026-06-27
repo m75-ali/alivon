@@ -1,11 +1,10 @@
 import Link from 'next/link'
+import BackButton from '@/app/components/BackButton'
 
 export default function PrivacyPage() {
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-10">
-      <Link href="/home" className="text-sm text-alivon-muted underline-offset-4 hover:underline">
-        ← Back
-      </Link>
+      <BackButton />
 
       <h1 className="mt-6 text-2xl font-semibold text-alivon-dark">Privacy Policy</h1>
       <p className="mt-1 text-sm text-alivon-muted">Last updated 25 June 2026</p>

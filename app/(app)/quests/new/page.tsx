@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import Link from 'next/link'
+import BackButton from '@/app/components/BackButton'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
@@ -67,9 +67,7 @@ export default function CreateQuestPage() {
 
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-8">
-      <Link href="/home" className="text-sm text-alivon-muted underline-offset-4 hover:underline">
-        ← Back
-      </Link>
+      <BackButton />
 
       <h1 className="mt-4 text-2xl font-semibold text-alivon-dark">New quest</h1>
       <p className="mt-1 text-sm text-alivon-muted">What long-term goal are you working toward?</p>

@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import BackButton from '@/app/components/BackButton'
 import { notFound, redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { getQuestById, type QuestDetail } from '@/lib/supabase/quests'
@@ -49,12 +50,13 @@ export default async function TimelinePage({ params }: { params: Promise<{ id: s
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-8">
       <div className="flex items-center justify-between">
-        <Link href="/home" className="text-sm text-alivon-muted underline-offset-4 hover:underline">
-          ← Back
-        </Link>
-        <Link href={`/quests/${id}/backlog`} className="text-sm text-alivon-primary underline-offset-4 hover:underline">
-          Manage items →
-        </Link>
+        <BackButton />
+        {/* Items can't be managed while completed (reopen first). */}
+        {!isCompleted && (
+          <Link href={`/quests/${id}/backlog`} className="text-sm text-alivon-primary underline-offset-4 hover:underline">
+            Manage items →
+          </Link>
+        )}
       </div>
 
       <h1 className="mt-4 text-2xl font-semibold text-alivon-dark">{quest.title}</h1>

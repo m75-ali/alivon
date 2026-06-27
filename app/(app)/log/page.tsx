@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import BackButton from '@/app/components/BackButton'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { getQuestItemsForLog } from '@/lib/supabase/quest-items'
@@ -55,9 +56,7 @@ export default async function LogPage() {
     const quests = await getActiveQuestsWithItems()
     return (
       <main className="mx-auto w-full max-w-2xl px-4 py-8">
-        <Link href="/home" className="text-sm text-alivon-muted underline-offset-4 hover:underline">
-          ← Back
-        </Link>
+        <BackButton />
         <h1 className="mt-4 text-2xl font-semibold text-alivon-dark">Log a Win</h1>
 
         <div className="mt-12 text-center">
@@ -102,9 +101,7 @@ export default async function LogPage() {
 
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-8">
-      <Link href="/home" className="text-sm text-alivon-muted underline-offset-4 hover:underline">
-        ← Back
-      </Link>
+      <BackButton />
       <h1 className="mt-4 text-2xl font-semibold text-alivon-dark">Log a Win</h1>
       <p className="mt-1 text-sm text-alivon-muted">What did you work on today?</p>
       <LogForm action={saveLogEntry} items={items} />

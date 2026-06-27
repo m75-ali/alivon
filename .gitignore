@@ -41,6 +41,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Briefs
+# Planning / brief docs — kept locally, not needed to run the app
 BRIEF_V2.rtf
 BRIEF_V1.rtf
+BRIEF_V2_RECONCILED.md
+V1_BUILD_STATE.md

@@ -10,23 +10,13 @@ export default async function Navbar() {
     <header className="sticky top-0 z-10 border-b border-alivon-border bg-white">
       <div className="mx-auto flex h-14 max-w-2xl items-center justify-between px-4">
         <Link href="/home" aria-label="Alivon home">
-          <Image
-            src="/brand/logo.svg"
-            alt="Alivon"
-            width={100}
-            height={28}
-            priority
-            className="hidden sm:block"
-            style={{ height: 'auto' }}
-          />
+          {/* icon-only mark (no wordmark) — logo-icon.svg viewBox 212x164 */}
           <Image
             src="/brand/logo-icon.svg"
             alt="Alivon"
-            width={28}
-            height={28}
+            width={49}
+            height={38}
             priority
-            className="block sm:hidden"
-            style={{ height: 'auto' }}
           />
         </Link>
 

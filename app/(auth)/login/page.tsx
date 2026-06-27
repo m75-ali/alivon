@@ -21,16 +21,16 @@ export default function LoginPage() {
 
         <form action={action} className="mt-8 space-y-4">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-alivon-muted">
-              Email
+            <label htmlFor="identifier" className="block text-sm font-medium text-alivon-muted">
+              Email or username
             </label>
             <input
-              id="email"
-              name="email"
-              type="email"
+              id="identifier"
+              name="identifier"
+              type="text"
               required
-              autoComplete="email"
-              placeholder="you@example.com"
+              autoComplete="username"
+              placeholder="you@example.com or yourname"
               className="mt-1 block w-full rounded-xl border border-alivon-border bg-white px-3 py-2.5 text-sm text-alivon-dark placeholder:text-alivon-border focus:border-alivon-primary focus:outline-none focus:ring-1 focus:ring-alivon-primary"
             />
           </div>

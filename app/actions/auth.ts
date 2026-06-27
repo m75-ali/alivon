@@ -26,13 +26,24 @@ function cleanAuthError(message: string | undefined): string {
 export async function login(_state: AuthState, formData: FormData): Promise<AuthState> {
   const supabase = await createClient()
 
-  const email = (formData.get('email') as string ?? '').trim()
-  if (!EMAIL_RE.test(email)) return { error: 'Please enter a valid email address.' }
+  const identifier = (formData.get('identifier') as string ?? '').trim()
+  const password = formData.get('password') as string
 
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password: formData.get('password') as string,
-  })
+  // Accept an email or a username. A username is resolved to its email via the
+  // email_for_username RPC; a generic message avoids revealing which part failed.
+  let email = identifier
+  if (!EMAIL_RE.test(identifier)) {
+    if (!USERNAME_RE.test(identifier.toLowerCase())) {
+      return { error: 'Enter a valid email or username.' }
+    }
+    const { data: resolved } = await supabase.rpc('email_for_username', {
+      uname: identifier.toLowerCase(),
+    })
+    if (!resolved) return { error: 'Invalid login credentials.' }
+    email = resolved as string
+  }
+
+  const { error } = await supabase.auth.signInWithPassword({ email, password })
 
   if (error) return { error: cleanAuthError(error.message) }
 

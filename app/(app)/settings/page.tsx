@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { logout } from '@/app/actions/auth'
 import DeleteAccountForm from './DeleteAccountForm'
+import ChangeEmailForm from './ChangeEmailForm'
 
 async function deleteAccount() {
   'use server'
@@ -33,6 +34,9 @@ export default async function SettingsPage() {
         <div className="mt-3 rounded-2xl border border-alivon-border bg-white p-5">
           <p className="text-xs text-alivon-muted">Signed in as</p>
           <p className="mt-0.5 text-sm font-medium text-alivon-dark">{user.email}</p>
+
+          <ChangeEmailForm currentEmail={user.email ?? ''} />
+
           <form action={logout} className="mt-4">
             <button
               type="submit"

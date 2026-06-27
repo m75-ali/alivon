@@ -94,6 +94,30 @@ export async function updatePassword(_state: AuthState, formData: FormData): Pro
   redirect('/home')
 }
 
+// Change the account email. Supabase sends a confirmation link (to the new
+// address, and to the old one if "Secure email change" is on); the change only
+// takes effect once confirmed via /auth/confirm (type=email_change).
+export async function changeEmail(_state: AuthState, formData: FormData): Promise<AuthState> {
+  const supabase = await createClient()
+
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Not signed in.' }
+
+  const email = (formData.get('email') as string ?? '').trim()
+  if (!EMAIL_RE.test(email)) return { error: 'Please enter a valid email address.' }
+  if (email.toLowerCase() === user.email?.toLowerCase()) {
+    return { error: 'That is already your email.' }
+  }
+
+  const { error } = await supabase.auth.updateUser({ email })
+  if (error) return { error: cleanAuthError(error.message) }
+
+  return {
+    error: null,
+    message: 'Confirmation sent. Check your new email (and your current one) to complete the change.',
+  }
+}
+
 export async function logout() {
   const supabase = await createClient()
   await supabase.auth.signOut()

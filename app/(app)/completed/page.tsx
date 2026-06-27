@@ -33,7 +33,7 @@ export default async function CompletedPage() {
           <p className="mt-1 text-sm text-alivon-border">Finish a quest and it&apos;ll land here.</p>
         </div>
       ) : (
-        <div className="mt-6 space-y-4">
+        <div className={`mt-6 grid gap-4 ${quests.length > 1 ? 'sm:grid-cols-2' : ''}`}>
           {quests.map(quest => <CompletedCard key={quest.id} quest={quest} />)}
         </div>
       )}
@@ -45,8 +45,8 @@ function CompletedCard({ quest }: { quest: CompletedQuest }) {
   return (
     <div className="overflow-hidden rounded-2xl border border-alivon-border bg-white">
       {quest.signed_cover_url && (
-        <div className="relative aspect-video w-full">
-          <Image src={quest.signed_cover_url} alt={quest.title} fill className="object-cover" />
+        <div className="relative aspect-video w-full bg-alivon-pale/30">
+          <Image src={quest.signed_cover_url} alt={quest.title} fill sizes="(min-width: 640px) 50vw, 100vw" className="object-contain" />
           <span className="absolute right-2 top-2 rounded-full bg-green-600 px-2.5 py-0.5 text-xs font-medium text-white">
             Completed
           </span>

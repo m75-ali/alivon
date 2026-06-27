@@ -17,6 +17,7 @@ export default async function Navbar() {
             height={28}
             priority
             className="hidden sm:block"
+            style={{ height: 'auto' }}
           />
           <Image
             src="/brand/logo-icon.svg"
@@ -25,6 +26,7 @@ export default async function Navbar() {
             height={28}
             priority
             className="block sm:hidden"
+            style={{ height: 'auto' }}
           />
         </Link>
 

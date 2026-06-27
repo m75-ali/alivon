@@ -85,7 +85,7 @@ function CapstoneCard({ quest, imageUrl }: { quest: QuestDetail; imageUrl: strin
     <div className="overflow-hidden rounded-2xl border-2 border-green-500 bg-white">
       {imageUrl && (
         <div className="relative aspect-video w-full">
-          <Image src={imageUrl} alt={quest.title} fill className="object-cover" />
+          <Image src={imageUrl} alt={quest.title} fill sizes="(min-width: 672px) 640px, 100vw" className="object-cover" />
         </div>
       )}
 
@@ -116,6 +116,7 @@ function EntryCard({ entry }: { entry: TimelineEntry }) {
             src={entry.signed_image_url}
             alt={entry.quest_item_title}
             fill
+            sizes="(min-width: 672px) 640px, 100vw"
             className="object-cover"
           />
         </div>

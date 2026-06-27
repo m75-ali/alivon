@@ -152,7 +152,7 @@ export async function setUsername(_state: AuthState, formData: FormData): Promis
     return { error: cleanAuthError(error.message) }
   }
 
-  revalidatePath('/settings')
+  revalidatePath('/profile')
   return { error: null, message: 'Username saved.' }
 }
 

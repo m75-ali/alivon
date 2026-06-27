@@ -2,10 +2,8 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { logout } from '@/app/actions/auth'
-import { getMyProfile } from '@/lib/supabase/profiles'
 import DeleteAccountForm from './DeleteAccountForm'
 import ChangeEmailForm from './ChangeEmailForm'
-import UsernameForm from './UsernameForm'
 
 async function deleteAccount() {
   'use server'
@@ -23,8 +21,6 @@ export default async function SettingsPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const profile = await getMyProfile()
-
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-8">
       <Link href="/home" className="text-sm text-alivon-muted underline-offset-4 hover:underline">
@@ -36,10 +32,7 @@ export default async function SettingsPage() {
       <section className="mt-8">
         <h2 className="text-xs font-medium uppercase tracking-wide text-alivon-muted">Account</h2>
         <div className="mt-3 rounded-2xl border border-alivon-border bg-white p-5">
-          <p className="text-xs text-alivon-muted">Username</p>
-          <UsernameForm currentUsername={profile?.username ?? null} />
-
-          <p className="mt-5 text-xs text-alivon-muted">Signed in as</p>
+          <p className="text-xs text-alivon-muted">Signed in as</p>
           <p className="mt-0.5 text-sm font-medium text-alivon-dark">{user.email}</p>
 
           <ChangeEmailForm currentEmail={user.email ?? ''} />

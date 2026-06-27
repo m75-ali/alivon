@@ -3,6 +3,7 @@
 import { useActionState, useRef, useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { resizeImage } from '@/lib/resizeImage'
 import type { QuestItemForLog } from '@/lib/supabase/quest-items'
 import type { LogState } from './page'
 
@@ -48,13 +49,16 @@ export default function LogForm({ action, items }: Props) {
     }
   }, [state.success, router])
 
-  function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
+  async function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
-    if (file) {
-      setPreview(URL.createObjectURL(file))
-    } else {
-      setPreview(null)
+    if (!file) { setPreview(null); return }
+    const resized = await resizeImage(file)
+    if (fileRef.current && resized !== file) {
+      const dt = new DataTransfer()
+      dt.items.add(resized)
+      fileRef.current.files = dt.files
     }
+    setPreview(URL.createObjectURL(resized))
   }
 
   if (state.success) {

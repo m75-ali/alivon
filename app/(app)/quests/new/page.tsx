@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react'
 import BackButton from '@/app/components/BackButton'
 import { useRouter } from 'next/navigation'
+import { resizeImage } from '@/lib/resizeImage'
 import { createClient } from '@/lib/supabase/client'
 
 const CATEGORIES = [
@@ -24,9 +25,16 @@ export default function CreateQuestPage() {
   const fileRef = useRef<HTMLInputElement>(null)
   const formRef = useRef<HTMLFormElement>(null)
 
-  function handleCoverChange(e: React.ChangeEvent<HTMLInputElement>) {
+  async function handleCoverChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
-    setPreview(file ? URL.createObjectURL(file) : null)
+    if (!file) { setPreview(null); return }
+    const resized = await resizeImage(file)
+    if (fileRef.current && resized !== file) {
+      const dt = new DataTransfer()
+      dt.items.add(resized)
+      fileRef.current.files = dt.files
+    }
+    setPreview(URL.createObjectURL(resized))
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {

@@ -1,7 +1,6 @@
 'use client'
 
 import { useActionState, useRef, useState } from 'react'
-import Image from 'next/image'
 
 type CompleteState = { error: string | null }
 
@@ -59,8 +58,10 @@ export default function CompleteForm({ questId, action }: Props) {
         </p>
         {preview ? (
           <div className="mt-2">
-            <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-alivon-border">
-              <Image src={preview} alt="Preview" fill className="object-cover" />
+            <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-alivon-border bg-alivon-pale/30">
+              {/* object-URL preview — next/image can't render blob: URLs */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={preview} alt="Preview" className="absolute inset-0 h-full w-full object-contain" />
             </div>
             <button
               type="button"

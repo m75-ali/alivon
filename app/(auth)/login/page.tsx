@@ -14,7 +14,7 @@ export default function LoginPage() {
   return (
     <main className="flex min-h-full flex-col items-center justify-center px-6 py-12">
       <div className="w-full max-w-sm">
-        <Image src="/brand/logo.svg" alt="Alivon" width={120} height={34} priority />
+        <Image src="/brand/logo.svg" alt="Alivon" width={120} height={34} priority style={{ height: 'auto' }} />
 
         <h2 className="mt-8 text-2xl font-semibold text-alivon-dark">Welcome back</h2>
         <p className="mt-1 text-sm text-alivon-muted">Sign in to continue your quests</p>

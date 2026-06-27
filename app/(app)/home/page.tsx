@@ -47,14 +47,15 @@ export default async function HomePage() {
         </div>
       ) : (
         <>
-          <div className="mt-6 space-y-4">
+          {/* One active quest fills the width (large); several tile into a grid. */}
+          <div className={`mt-6 grid gap-4 ${active.length > 1 ? 'sm:grid-cols-2' : ''}`}>
             {active.map(quest => <QuestCard key={quest.id} quest={quest} />)}
           </div>
 
           {paused.length > 0 && (
             <div className="mt-10">
               <h2 className="text-xs font-medium uppercase tracking-wide text-alivon-muted">Paused</h2>
-              <div className="mt-3 space-y-4">
+              <div className={`mt-3 grid gap-4 ${paused.length > 1 ? 'sm:grid-cols-2' : ''}`}>
                 {paused.map(quest => <QuestCard key={quest.id} quest={quest} />)}
               </div>
             </div>
@@ -84,8 +85,8 @@ function QuestCard({ quest }: { quest: QuestWithItems }) {
   return (
     <div className={`overflow-hidden rounded-2xl border border-alivon-border bg-white ${isPaused ? 'opacity-70' : ''}`}>
       {quest.signed_cover_url && (
-        <div className="relative aspect-video w-full">
-          <Image src={quest.signed_cover_url} alt={quest.title} fill className="object-cover" />
+        <div className="relative aspect-video w-full bg-alivon-pale/30">
+          <Image src={quest.signed_cover_url} alt={quest.title} fill sizes="(min-width: 640px) 50vw, 100vw" className="object-contain" />
         </div>
       )}
 

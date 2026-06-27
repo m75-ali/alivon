@@ -18,7 +18,7 @@ export default function SignupPage() {
     return (
       <main className="flex min-h-full flex-col items-center justify-center px-6 py-12">
         <div className="w-full max-w-sm text-center">
-          <Image src="/brand/logo.svg" alt="Alivon" width={120} height={34} priority className="mx-auto" />
+          <Image src="/brand/logo.svg" alt="Alivon" width={120} height={34} priority className="mx-auto" style={{ height: 'auto' }} />
           <h2 className="mt-8 text-2xl font-semibold text-alivon-dark">Check your email</h2>
           <p className="mt-3 text-sm text-alivon-muted">{state.message}</p>
           <Link
@@ -35,7 +35,7 @@ export default function SignupPage() {
   return (
     <main className="flex min-h-full flex-col items-center justify-center px-6 py-12">
       <div className="w-full max-w-sm">
-        <Image src="/brand/logo.svg" alt="Alivon" width={120} height={34} priority />
+        <Image src="/brand/logo.svg" alt="Alivon" width={120} height={34} priority style={{ height: 'auto' }} />
 
         <h2 className="mt-8 text-2xl font-semibold text-alivon-dark">Start your journey</h2>
         <p className="mt-1 text-sm text-alivon-muted">Create an account to begin your first quest</p>

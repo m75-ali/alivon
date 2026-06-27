@@ -78,5 +78,5 @@ export async function completeQuest(_prev: CompleteState, formData: FormData): P
 
   revalidatePath('/home')
   revalidatePath('/completed')
-  redirect(`/quests/${questId}/timeline`)
+  redirect('/completed')
 }

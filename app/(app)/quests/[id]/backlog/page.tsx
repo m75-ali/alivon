@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import BackButton from '@/app/components/BackButton'
 import { notFound, redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
@@ -131,9 +132,7 @@ export default async function BacklogPage({ params }: { params: Promise<{ id: st
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-8">
       <div className="flex items-center justify-between">
-        <Link href="/home" className="text-sm text-alivon-muted underline-offset-4 hover:underline">
-          ← Back
-        </Link>
+        <BackButton />
         <Link href={`/quests/${id}/timeline`} className="text-sm text-alivon-primary underline-offset-4 hover:underline">
           Timeline →
         </Link>

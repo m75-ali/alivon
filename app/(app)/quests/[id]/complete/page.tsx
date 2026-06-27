@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import BackButton from '@/app/components/BackButton'
 import { notFound, redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { getQuestById } from '@/lib/supabase/quests'
@@ -20,9 +20,7 @@ export default async function CompleteQuestPage({ params }: { params: Promise<{ 
 
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-8">
-      <Link href="/home" className="text-sm text-alivon-muted underline-offset-4 hover:underline">
-        ← Back
-      </Link>
+      <BackButton />
 
       <div className="mt-6 text-center">
         <h1 className="text-2xl font-semibold text-alivon-dark">Complete this quest?</h1>

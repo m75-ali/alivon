@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import BackButton from '@/app/components/BackButton'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { logout } from '@/app/actions/auth'
@@ -23,9 +24,7 @@ export default async function SettingsPage() {
 
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-8">
-      <Link href="/home" className="text-sm text-alivon-muted underline-offset-4 hover:underline">
-        ← Back
-      </Link>
+      <BackButton />
 
       <h1 className="mt-4 text-2xl font-semibold text-alivon-dark">Settings</h1>
 

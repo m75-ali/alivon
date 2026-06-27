@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import BackButton from '@/app/components/BackButton'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { getMyProfile } from '@/lib/supabase/profiles'
@@ -14,9 +14,7 @@ export default async function ProfilePage() {
 
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-8">
-      <Link href="/home" className="text-sm text-alivon-muted underline-offset-4 hover:underline">
-        ← Back
-      </Link>
+      <BackButton />
 
       <div className="mt-6 flex items-center gap-4">
         <Avatar username={profile?.username ?? null} size={64} />

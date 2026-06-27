@@ -1,14 +1,18 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { signup, type AuthState } from '@/app/actions/auth'
+import PasswordInput from '../PasswordInput'
 
 const initialState: AuthState = { error: null }
 
 export default function SignupPage() {
   const [state, action, pending] = useActionState(signup, initialState)
+  const [password, setPassword] = useState('')
+  const [confirm, setConfirm] = useState('')
+  const mismatch = confirm.length > 0 && password !== confirm
 
   if (state.message) {
     return (
@@ -52,21 +56,30 @@ export default function SignupPage() {
             />
           </div>
 
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-alivon-muted">
-              Password
-            </label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              required
-              autoComplete="new-password"
-              minLength={6}
-              placeholder="••••••••"
-              className="mt-1 block w-full rounded-xl border border-alivon-border bg-white px-3 py-2.5 text-sm text-alivon-dark placeholder:text-alivon-border focus:border-alivon-primary focus:outline-none focus:ring-1 focus:ring-alivon-primary"
-            />
-          </div>
+          <PasswordInput
+            id="password"
+            name="password"
+            label="Password"
+            autoComplete="new-password"
+            minLength={6}
+            value={password}
+            onChange={setPassword}
+          />
+
+          <PasswordInput
+            id="passwordConfirm"
+            name="passwordConfirm"
+            label="Confirm password"
+            autoComplete="new-password"
+            minLength={6}
+            value={confirm}
+            onChange={setConfirm}
+            error={mismatch}
+          />
+
+          {mismatch && (
+            <p className="text-sm text-red-600">Passwords don&apos;t match.</p>
+          )}
 
           {state.error && (
             <p className="text-sm text-red-600">{state.error}</p>
@@ -74,7 +87,7 @@ export default function SignupPage() {
 
           <button
             type="submit"
-            disabled={pending}
+            disabled={pending || mismatch}
             className="w-full rounded-xl bg-alivon-primary px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-alivon-deeper disabled:opacity-50"
           >
             {pending ? 'Creating account…' : 'Create account'}

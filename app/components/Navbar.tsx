@@ -1,7 +1,11 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { getMyProfile } from '@/lib/supabase/profiles'
+import AccountMenu from './AccountMenu'
 
-export default function Navbar() {
+export default async function Navbar() {
+  const profile = await getMyProfile()
+
   return (
     <header className="sticky top-0 z-10 border-b border-alivon-border bg-white">
       <div className="mx-auto flex h-14 max-w-2xl items-center justify-between px-4">
@@ -31,12 +35,7 @@ export default function Navbar() {
           >
             Log a Win
           </Link>
-          <Link
-            href="/settings"
-            className="text-sm text-alivon-muted underline-offset-4 hover:text-alivon-dark hover:underline"
-          >
-            Settings
-          </Link>
+          <AccountMenu username={profile?.username ?? null} />
         </nav>
       </div>
     </header>
